@@ -13,11 +13,11 @@ This module was started as a replacement for the current [iptables module] (http
 ##Usage
 ###iptables
 
-  firewall { "0001-example-rule":
-    iniface => 'lo',
-    chain   => 'INPUT',
-    jump    => 'ACCEPT'
-  }
+    firewall { "0001-example-rule":
+      iniface => 'lo',
+      chain   => 'INPUT',
+      jump    => 'ACCEPT'
+    }
 
 ##Future Work
 
