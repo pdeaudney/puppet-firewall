@@ -8,7 +8,7 @@ This module provides a new type, firewall, for managing firewall rules. Only ipt
 
 Currently, the iptables provider determines whether a rule exists using the name as a comment. Some older distros do not support iptables comments, which can cause issues.
 
-This module was started as a replacement for the current [iptables module] (https://github.com/camptocamp/puppet-iptables). As such, the interface has been left intact to allow users to easily migrate from one provider to the other.
+This module was started as a replacement for the current [iptables module](https://github.com/camptocamp/puppet-iptables). As such, the interface has been left intact to allow users to easily migrate from one provider to the other.
 
 ##Usage
 ###iptables
