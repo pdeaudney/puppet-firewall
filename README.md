@@ -4,9 +4,11 @@ Puppet module to manage firewall rules.
 
 ##Overview
 
-This module provides a new type, firewall, for managing firewall rules. Only iptables is supported at the moment, though ip6tables, ipfw, pf, and ipf support is planned for future releases.
+This module provides a new type, firewall, for managing firewall rules. Only iptables and ip6 tables are supported at the moment, though ipfw, pf, and ipf support is planned for future releases.
 
 Currently, the iptables provider determines whether a rule exists using the name as a comment. Some older distros do not support iptables comments, which can cause issues.
+
+If your current ruleset does not have comments, all new rules are inserted in order above them.
 
 This module was started as a replacement for the current [iptables module](https://github.com/camptocamp/puppet-iptables). As such, the interface has been left intact to allow users to easily migrate from one provider to the other.
 
@@ -22,13 +24,13 @@ This module was started as a replacement for the current [iptables module](https
 ##Future Work
 
 - Determine whether iptables supports comments and, if not, find a different way of diffing the rules
-- Implement ip6tables
 - Refactor type to allow for additional providers
 - Find a way to create provider unit tests
+- Support for negations
 
 ##Copyright
 
-Copyright (c) 2010 (mt) Media Temple Inc.
+Copyright (c) 2011 (mt) Media Temple Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
