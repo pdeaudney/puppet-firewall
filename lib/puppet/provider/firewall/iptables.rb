@@ -73,19 +73,8 @@ Puppet::Type.type(:firewall).provide :iptables, :parent => Puppet::Provider::Fir
   # Check whether the rule exists or has been modified
   def exists?
     debug "Checking whether rule %s exists or is insync" % resource[:name]
+    resource[:rules] = self.class.instances
     insync?
-  end
-
-  # Check the current rule status
-  def insync?
-    unless properties[:ensure] == :absent
-      properties.each do |k, v|
-        if resource[k].to_s != v
-          resource[:ensure] = :modified
-          break false
-        end
-      end
-    end
   end
 
   def self.instances
@@ -146,7 +135,7 @@ Puppet::Type.type(:firewall).provide :iptables, :parent => Puppet::Provider::Fir
   def position
     debug "Determining rule position"
     rules = []
-    self.class.instances.each do |rule|
+    resource[:rules].each do |rule|
       if rule.chain == resource[:chain].to_s
         rules << rule.name.slice(/^\d+/).to_i
       end

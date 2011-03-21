@@ -210,6 +210,10 @@ Puppet::Type.newtype(:firewall) do
   newparam(:redirect) do
     desc "Value to specify the destination port or range of ports to use to redirect the packet to the machine itself. Optional."
   end
+
+  newparam(:rules) do
+    desc "Empty parameter used to cache the current ruleset."
+  end
   
   validate do
     if self[:sport]

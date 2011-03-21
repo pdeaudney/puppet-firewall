@@ -17,7 +17,7 @@ class Puppet::Provider::Firewall < Puppet::Provider
   end
   
   def query
-    self.class.instances.each do |rule|
+    resource[:rules].each do |rule|
       if rule.name == self.name or rule.name.downcase == self.name
         return rule.properties
       end
