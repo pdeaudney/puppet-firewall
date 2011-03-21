@@ -43,7 +43,7 @@ Puppet::Type.newtype(:firewall) do
     desc "Holds value of iptables -A parameter.
     Possible values are: 'INPUT', 'FORWARD', 'OUTPUT', 'PREROUTING', 'POSTROUTING'.
     Default value is 'INPUT'"
-    newvalues(:INPUT, :FORWARD, :OUTPUT, :PREROUTING, :POSTROUTING, :MTINPUT)
+    newvalues(:INPUT, :FORWARD, :OUTPUT, :PREROUTING, :POSTROUTING)
     defaultto "INPUT"
   end
   
