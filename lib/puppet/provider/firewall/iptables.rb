@@ -15,7 +15,8 @@ Puppet::Type.type(:firewall).provide :iptables, :parent => Puppet::Provider::Fir
 
   # iptables is a Linux thang, yo.
   confine :operatingsystem => [:linux, :debian, :ubuntu, :centos, :redhat]
-  
+  defaultfor :operatingsystem => [:linux, :debian, :ubuntu, :centos, :redhat]
+
   IptablesVer = iptables('-V').slice(/\d\.\d.\d/)
 
   # Map of parameters to iptables arguments. To ensure consistency, multiport is always used no matter how many
@@ -90,7 +91,7 @@ Puppet::Type.type(:firewall).provide :iptables, :parent => Puppet::Provider::Fir
     debug "Converting existing rules to resources"
     rules = []
     ipsave.lines do |line|
-      unless line =~ /^\#\S+|\:\S+|COMMIT/
+      unless line =~ /^\#\s+|^\:\S+|^COMMIT/
         if line =~ /^\*/
           table = line.sub(/\*/, "")
         else
