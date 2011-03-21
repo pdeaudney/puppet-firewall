@@ -48,9 +48,10 @@ Puppet::Type.type(:firewall).provide :iptables, :parent => Puppet::Provider::Fir
 
   # This is necessary for the order of the iptables arguments 
   Fields = [:table, :chain, :source, :destination, :iniface, :outiface, :proto, :sport, :dport, :tosource, :todest, :reject, :set_mark, :log_level, :log_prefix, :comment, :state, :icmp, :limit, :burst, :redirect, :jump]
-    
-  mk_resource_methods
   
+  mk_resource_methods
+ 
+  # Backticks are used to work around the quoted comment string
   # Create the rule
   def create
     debug "Creating rule %s" % resource[:name]
@@ -66,7 +67,7 @@ Puppet::Type.type(:firewall).provide :iptables, :parent => Puppet::Provider::Fir
   # Destroy the rule
   def destroy
     debug "Destroying rule %s" % resource[:name]
-    `iptables #{args.join(' ').sub(/\-A/, '-D')}`
+    `iptables #{args.join(' ').sub(/\-I/, '-D')}`
   end
 
   # Check whether the rule exists or has been modified
@@ -103,7 +104,7 @@ Puppet::Type.type(:firewall).provide :iptables, :parent => Puppet::Provider::Fir
     end
     rules
   end
-  
+
   def self.rule_to_hash(line, table)
     hash = {}
     keys = []
@@ -121,10 +122,15 @@ Puppet::Type.type(:firewall).provide :iptables, :parent => Puppet::Provider::Fir
     # The regex here is used to remove the leading and trailing quotes from the comment string.
     keys.zip(values.scan(/"[^"]*"|\S+/).reverse) { |f, v| hash[f] = v }
     hash[:provider] = self.name.to_s
-    hash[:name] = hash[:comment].gsub!(/^"(.*?)"$/,'\1')
+    if hash[:comment]
+      hash[:name] = hash[:comment].gsub!(/^"(.*?)"$/,'\1')
+    else
+      # Push rule to the end of the chain if it does not have a comment
+      hash[:name] = hash[:comment] = "9999 iptables-rule"
+    end
     hash
   end
-  
+
   # Determine if iptables supports comments
   def comment_support
     if IptablesVer.split('.')[1].to_i >= 3
@@ -136,7 +142,7 @@ Puppet::Type.type(:firewall).provide :iptables, :parent => Puppet::Provider::Fir
     end
   end
 
-  # Determine the position where the rule should be inserted
+  # Determine the position where the rule should be inserted.
   def position
     debug "Determining rule position"
     rules = []
